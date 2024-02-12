@@ -1,0 +1,88 @@
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = []
+}
+
+model User {
+    id              Int          @id @default(autoincrement())
+    rollNo          String       @unique @default("ADMIN_ACC")
+    firstName       String
+    middleName      String
+    lastName        String
+    email           String       @unique
+    phoneNo         String
+    password        String
+    role            String       @db.LongText()
+    department_name String
+    joining_year    Int          @default(0)
+    passout_year    Int          @default(0)
+    department      Department   @relation(fields: [department_name], references: [code], onDelete: Cascade)
+    enrollment      Enrollment[]
+    assign          Assign[]
+}
+
+model Department {
+    id     Int      @unique @default(autoincrement())
+    code   String   @id
+    name   String   @unique
+    user   User[]
+    course Course[]
+    result Result[]
+}
+
+model Course {
+    id              String       @id
+    course_name     String
+    credits         Int
+    sem             Int
+    department_name String
+    department      Department   @relation(fields: [department_name], references: [code], onDelete: Cascade)
+    enrollment      Enrollment[]
+    assign          Assign[]
+    result          Result[]
+}
+
+model Enrollment {
+    id        Int    @id @default(autoincrement())
+    user_id   Int
+    course_id String
+    prof      Int
+    sem       Int
+    year      Int
+    user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    course    Course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+}
+
+model Assign {
+    id        Int    @unique @default(autoincrement())
+    user_id   Int
+    course_id String
+    sem       Int
+    year      Int
+    user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    course    Course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+    @@id([course_id, year, sem])
+}
+
+model Result {
+    id            Int        @id @default(autoincrement())
+    sem           Int
+    courseID      String
+    departmentId  String
+    rollNo        String
+    mse           Int
+    ese           Int
+    isa           Int
+    creditEarned  Int
+    gradePoint    Int
+    gradeObtained Int
+    total         Int
+    course        Course     @relation(fields: [courseID], references: [id], onDelete: Cascade)
+    department    Department @relation(fields: [departmentId], references: [code], onDelete: Cascade)
+}
