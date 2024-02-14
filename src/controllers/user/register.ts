@@ -3,7 +3,10 @@ import { user } from "../../models/user.model";
 import errorHandler from "../../utils/errorHandler";
 import prisma from "../../utils/prisma";
 import bcrypt from "bcryptjs";
-
+import fs from "fs";
+import path from "path";
+import jsonGenerator from "csvtojson";
+import { decodeRole } from "../../utils/getRole";
 export const registerUser = async (
   req: Request<{}, {}, user>,
   res: Response,
@@ -45,6 +48,51 @@ export const registerUser = async (
     }
   } catch (error) {
     console.log(error);
+    return next(new errorHandler(500, "Internal Server Error"));
+  }
+};
+
+export const registerMultipleUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const filepath = path.join(__dirname, "/uploads/data.csv");
+    const data: Array<user> = await jsonGenerator().fromFile(filepath);
+    data.forEach(async (item) => {
+      const hashedPassword = await bcrypt.hash(item.password, 10);
+      await prisma.user.create({
+        data: {
+          rollNo: item.rollNo,
+          firstName: item.firstName,
+          middleName: item.middleName,
+          lastName: item.lastName,
+          email: item.email,
+          phoneNo: item.phoneNo,
+          password: hashedPassword,
+          role: decodeRole(item.role),
+          department_name: item.department_name,
+          joining_year: Number(item.joining_year),
+          passout_year: Number(item.passout_year),
+        },
+        select: {
+          email: true,
+        },
+      });
+    });
+    fs.unlink(filepath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      } else {
+        console.log("File deleted successfully.");
+      }
+    });
+    res.status(200).json({
+      type: "Success",
+      msg: "Users inserted Successfully",
+    });
+  } catch (error) {
     return next(new errorHandler(500, "Internal Server Error"));
   }
 };

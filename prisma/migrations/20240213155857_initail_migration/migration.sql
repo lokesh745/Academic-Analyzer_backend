@@ -60,7 +60,8 @@ CREATE TABLE `Assign` (
     `sem` INTEGER NOT NULL,
     `year` INTEGER NOT NULL,
 
-    PRIMARY KEY (`id`)
+    UNIQUE INDEX `Assign_id_key`(`id`),
+    PRIMARY KEY (`course_id`, `year`, `sem`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -92,9 +93,6 @@ ALTER TABLE `Enrollment` ADD CONSTRAINT `Enrollment_user_id_fkey` FOREIGN KEY (`
 
 -- AddForeignKey
 ALTER TABLE `Enrollment` ADD CONSTRAINT `Enrollment_course_id_fkey` FOREIGN KEY (`course_id`) REFERENCES `Course`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Enrollment` ADD CONSTRAINT `Enrollment_prof_fkey` FOREIGN KEY (`prof`) REFERENCES `Assign`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Assign` ADD CONSTRAINT `Assign_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
