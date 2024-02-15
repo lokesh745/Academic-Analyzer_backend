@@ -15,12 +15,13 @@ console.log(cl.yellow(" DB Connection Details :- "));
 
 async function connectToMySQL() {
   try {
+    const port = process.env.DBPORT;
     const pool = mysql.createPool({
       host: host,
       user: username,
       password: db_password,
       database: database,
-      port: 3306,
+      port: Number(port),
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
@@ -46,10 +47,10 @@ async function connectToMySQL() {
     const department_name = "ADMIN01";
     let role = process.env.ADMIN;
 
-    const insertDept = `INSERT INTO department (code,name) VALUES (?,?)`;
+    const insertDept = `INSERT INTO Department (code,name) VALUES (?,?)`;
     await connection.execute(insertDept, ["ADMIN01", "DEPT"]);
 
-    const insertQuery = `INSERT INTO user (firstName, middleName, lastName, email, phoneNo, password,department_name,role) VALUES (?,?,?,?,?,?,?,?) `;
+    const insertQuery = `INSERT INTO User (firstName, middleName, lastName, email, phoneNo, password,department_name,role) VALUES (?,?,?,?,?,?,?,?) `;
     await connection.execute(insertQuery, [
       firstName,
       middleName,
