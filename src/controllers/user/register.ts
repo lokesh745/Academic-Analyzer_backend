@@ -57,30 +57,44 @@ export const registerMultipleUser = async (
   res: Response,
   next: NextFunction
 ) => {
+  const filepath = path.join(__dirname, `../../../uploads/${req.fileName}`);
+  const data: Array<user> = await jsonGenerator().fromFile(filepath);
   try {
-    const filepath = path.join(__dirname, "/uploads/data.csv");
-    const data: Array<user> = await jsonGenerator().fromFile(filepath);
     data.forEach(async (item) => {
       const hashedPassword = await bcrypt.hash(item.password, 10);
-      await prisma.user.create({
-        data: {
+      const result = await prisma.user.findUnique({
+        where: {
           rollNo: item.rollNo,
-          firstName: item.firstName,
-          middleName: item.middleName,
-          lastName: item.lastName,
-          email: item.email,
-          phoneNo: item.phoneNo,
-          password: hashedPassword,
-          role: decodeRole(item.role),
-          department_name: item.department_name,
-          joining_year: Number(item.joining_year),
-          passout_year: Number(item.passout_year),
-        },
-        select: {
-          email: true,
         },
       });
+      if (!result) {
+        await prisma.user.create({
+          data: {
+            rollNo: item.rollNo,
+            firstName: item.firstName,
+            middleName: item.middleName,
+            lastName: item.lastName,
+            email: item.email,
+            phoneNo: item.phoneNo,
+            password: hashedPassword,
+            role: decodeRole(item.role),
+            department_name: item.department_name,
+            joining_year: Number(item.joining_year),
+            passout_year: Number(item.passout_year),
+          },
+          select: {
+            email: true,
+          },
+        });
+      }
     });
+    res.status(201).json({
+      type: "Success",
+      msg: "Users Registered Successfully",
+    });
+  } catch (error: any) {
+    return next(new errorHandler(417, `${error.code}`));
+  } finally {
     fs.unlink(filepath, (err) => {
       if (err) {
         console.error("Error deleting file:", err);
@@ -88,11 +102,5 @@ export const registerMultipleUser = async (
         console.log("File deleted successfully.");
       }
     });
-    res.status(200).json({
-      type: "Success",
-      msg: "Users inserted Successfully",
-    });
-  } catch (error) {
-    return next(new errorHandler(500, "Internal Server Error"));
   }
 };

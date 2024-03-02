@@ -11,6 +11,7 @@ import { myProfile } from "../controllers/user/profile";
 import { getAllUsers } from "../controllers/user/getAllUsers";
 import { allProf } from "../controllers/professor/allProfessors";
 import { upload } from "../utils/multer";
+import { getUserDetails } from "../controllers/user/getUser";
 
 const router = express.Router();
 
@@ -29,5 +30,6 @@ router.post(
   upload.single("file"),
   registerMultipleUser
 );
+router.get("/details", verifyJwt, getUserDetails);
 
 export default router;

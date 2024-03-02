@@ -10,6 +10,7 @@ import profRouter from "../src/routes/professorRoutes";
 import resultRouter from "../src/routes/resultRoute";
 import adminRouter from "../src/routes/adminRoutes";
 import studentRouter from "../src/routes/studentRoutes";
+import graphRouter from "../src/routes/graphsRoutes";
 import errorHandler from "./utils/errorHandler";
 import cookieParser from "cookie-parser";
 
@@ -64,6 +65,7 @@ app.use("/backend-api/prof", profRouter);
 app.use("/backend-api/result", resultRouter);
 app.use("/backend-api/admin", adminRouter);
 app.use("/backend-api/student", studentRouter);
+app.use("/backend-api/graph", graphRouter);
 
 //error handling
 app.use(
