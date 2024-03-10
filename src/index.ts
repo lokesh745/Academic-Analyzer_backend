@@ -19,7 +19,10 @@ dotenv.config();
 const app = express();
 //middleware
 // Specify the allowed origin(s)
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = [
+  "https://erp-frontend-alpha.vercel.app",
+  "http://localhost:3000",
+];
 
 // Enable CORS for all routes
 app.use(

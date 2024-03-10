@@ -36,8 +36,8 @@ export const login = async (
     const token = await generateAccessToken(old_user.email);
     const options: cookieOPtions = {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
     };
     res.cookie("accessToken", token, options);
 

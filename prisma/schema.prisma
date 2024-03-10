@@ -48,14 +48,15 @@ model Course {
 }
 
 model Enrollment {
-    id        Int    @id @default(autoincrement())
+    id        Int    @unique @default(autoincrement())
     user_id   Int
     course_id String
-    prof      Int
     sem       Int
     year      Int
     user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
     course    Course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+    @@id([course_id, year, sem])
 }
 
 model Assign {

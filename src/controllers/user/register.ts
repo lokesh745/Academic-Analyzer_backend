@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import jsonGenerator from "csvtojson";
 import { decodeRole } from "../../utils/getRole";
+import axios from "axios";
 export const registerUser = async (
   req: Request<{}, {}, user>,
   res: Response,
@@ -68,6 +69,15 @@ export const registerMultipleUser = async (
         },
       });
       if (!result) {
+        const data = {
+          to: item.email,
+          user: req.uniqueIdentity,
+          subject: "Test Email From Erp Platform",
+          body: `Erp System Administrator
+          username: ${item.email}
+          password: ${item.password}
+          `,
+        };
         await prisma.user.create({
           data: {
             rollNo: item.rollNo,
@@ -86,6 +96,14 @@ export const registerMultipleUser = async (
             email: true,
           },
         });
+
+        // email;
+
+        // await axios.post(
+        //   "http://localhost:4000/backend-email-service/email",
+        //   data
+        // );
+        // console.log("executed");
       }
     });
     res.status(201).json({
