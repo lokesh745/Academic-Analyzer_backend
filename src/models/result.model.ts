@@ -5,3 +5,11 @@ export interface result {
   rollNo: string;
   credits_earned: number;
 }
+
+export interface result_multiple {
+  course_id: string;
+  rollNo: number;
+  mse: number;
+  ese: number;
+  isa: number;
+}

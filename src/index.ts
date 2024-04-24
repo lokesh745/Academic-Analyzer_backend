@@ -11,6 +11,7 @@ import resultRouter from "../src/routes/resultRoute";
 import adminRouter from "../src/routes/adminRoutes";
 import studentRouter from "../src/routes/studentRoutes";
 import graphRouter from "../src/routes/graphsRoutes";
+import attendenceRouter from "../src/routes/attendenceRoutes";
 import errorHandler from "./utils/errorHandler";
 import cookieParser from "cookie-parser";
 
@@ -69,6 +70,7 @@ app.use("/backend-api/result", resultRouter);
 app.use("/backend-api/admin", adminRouter);
 app.use("/backend-api/student", studentRouter);
 app.use("/backend-api/graph", graphRouter);
+app.use("/backend-api/attendence", attendenceRouter);
 
 //error handling
 app.use(

@@ -3,5 +3,10 @@ export interface enroll {
   course_id: string;
   sem: number;
   year: number;
-  prof: number;
+}
+
+export interface multipleEnroll {
+  rollNo: string;
+  course_id: string;
+  year: number;
 }

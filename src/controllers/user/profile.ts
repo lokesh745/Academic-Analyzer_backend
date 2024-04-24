@@ -14,6 +14,8 @@ export const myProfile = async (
       select: {
         email: true,
         role: true,
+        firstName: true,
+        lastName: true,
       },
     });
     if (user) {

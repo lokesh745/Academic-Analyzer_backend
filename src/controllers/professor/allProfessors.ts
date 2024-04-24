@@ -15,6 +15,7 @@ export const allProf = async (
           AND: [{ role: process.env.PROFESSOR }, { department_name: dept }],
         },
         select: {
+          id: true,
           rollNo: true,
           firstName: true,
           middleName: true,

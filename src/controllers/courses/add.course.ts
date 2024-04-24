@@ -1,12 +1,12 @@
 import path from "path";
 import fs from "fs";
 import { Request, Response, NextFunction } from "express";
-import { course } from "../../models/course.model";
+import { course, course2 } from "../../models/course.model";
 import errorHandler from "../../utils/errorHandler";
 import prisma from "../../utils/prisma";
 import jsonGenerator from "csvtojson";
 export const addCourse = async (
-  req: Request<{}, {}, course>,
+  req: Request<{}, {}, course2>,
   res: Response,
   next: NextFunction
 ) => {
@@ -52,13 +52,13 @@ export const addMultipleCourse = async (
     data.forEach(async (item) => {
       const result = await prisma.course.findUnique({
         where: {
-          id: item.id,
+          id: item.course_id,
         },
       });
       if (!result) {
         await prisma.course.create({
           data: {
-            id: item.id,
+            id: item.course_id,
             course_name: item.course_name,
             credits: Number(item.credits),
             sem: Number(item.sem),

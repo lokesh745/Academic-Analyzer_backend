@@ -15,16 +15,18 @@ export const addProfessor = async (
       },
       select: {
         role: true,
+        id: true,
       },
     });
 
     if (user && user.role == process.env.PROFESSOR) {
       const data = await prisma.assign.findUnique({
         where: {
-          course_id_year_sem: {
+          course_id_year_sem_user_id: {
             course_id: req.body.course_id,
             year: req.body.year,
             sem: req.body.sem,
+            user_id: user.id,
           },
         },
       });
