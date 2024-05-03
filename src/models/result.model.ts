@@ -12,4 +12,5 @@ export interface result_multiple {
   mse: number;
   ese: number;
   isa: number;
+  year: number;
 }

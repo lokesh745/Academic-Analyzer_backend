@@ -8,6 +8,7 @@ import path from "path";
 import jsonGenerator from "csvtojson";
 import { decodeRole } from "../../utils/getRole";
 import axios from "axios";
+import { CLIENT_RENEG_LIMIT } from "tls";
 export const registerUser = async (
   req: Request<{}, {}, user>,
   res: Response,
@@ -59,6 +60,7 @@ export const registerMultipleUser = async (
   next: NextFunction
 ) => {
   const filepath = path.join(__dirname, `../../../uploads/${req.fileName}`);
+  console.log(filepath);
   const data: Array<user> = await jsonGenerator().fromFile(filepath);
   try {
     data.forEach(async (item) => {
