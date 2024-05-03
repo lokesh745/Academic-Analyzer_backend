@@ -6,6 +6,7 @@ datasource db {
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = []
+    binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 model User {
@@ -84,8 +85,9 @@ model Result {
     isa           Int
     creditEarned  Int
     gradePoint    Int
-    gradeObtained Int
+    gradeObtained String
     total         Int
+    year          Int
     course        Course     @relation(fields: [courseID], references: [id], onDelete: Cascade)
     department    Department @relation(fields: [departmentId], references: [code], onDelete: Cascade)
 }
